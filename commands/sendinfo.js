@@ -7,7 +7,7 @@ const channelInfos = {
             .setColor(0x00a1e0)
             .setTitle("Efrei Craft")
             .setThumbnail("https://avatars.githubusercontent.com/u/113559229")
-            .setDescription("**Bienvenue** sur le serveur d’Efrei Craft, le serveur discord de l’association du même nom ! L’équipe te remercie d’avoir fait le pas et de nous avoir rejoint, nous espérons que tu trouveras ici ce que tu es venu chercher : *des potes sur Minecraft* ! ")
+            .setDescription("**Bienvenue** sur le serveur d’Efrei Craft ! L’équipe te remercie d’avoir fait le pas et de nous avoir rejoint, nous espérons que tu trouveras ici ce que tu es venu chercher : *des potes sur Minecraft* ! ")
             .addFields(
                 {
                     name: "\u200B",
@@ -91,7 +91,7 @@ const channelInfos = {
                 {
                     name: "\u200B",
                     value: "🎮 *Version du jeu :*\n\n" +
-                        "> <:minecraft:1016990742419357786> **Vanilla** \u200B \u200B <:forge:1018855440337096765> **Moddé**"
+                        "> <:minecraft:1016990742419357786> **Vanilla** \u200B \u200B <:forge:1018855440337096765> **Moddé** \u200B \u200B <:red_bed:1027288341248475136> **Mini-jeux**"
                 }
             )
     ],
@@ -249,7 +249,12 @@ const channelComponents = {
                     .setCustomId("modded")
                     .setLabel("Moddé")
                     .setStyle(ButtonStyle.Success)
-                    .setEmoji("1018855440337096765")
+                    .setEmoji("1018855440337096765"),
+                new ButtonBuilder()
+                    .setCustomId("minijeux")
+                    .setLabel("Mini-jeux")
+                    .setStyle(ButtonStyle.Success)
+                    .setEmoji("1027288341248475136")
             )
     ],
     "lxp": [

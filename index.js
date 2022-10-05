@@ -54,12 +54,34 @@ client.on('interactionCreate', async interaction => {
 
         // BOUTONS - VERSIONS DE MINECRAFT
         else if (interaction.customId === "vanilla") {
-            await interaction.member.roles.add("1017137520263311500");
-            await interaction.reply({content: "Vous avez choisi le rôle *Vanilla* !", ephemeral: true});
+            if (!interaction.member.roles.cache.some(r => r.id === "1017137520263311500")) {
+                await interaction.member.roles.add("1017137520263311500");
+                await interaction.reply({content: "Vous avez choisi le rôle *Vanilla* !", ephemeral: true});
+            }
+            else {
+                await interaction.member.roles.remove("1017137520263311500");
+                await interaction.reply({content: "Le rôle *Vanilla* vous a bien été enlevé !", ephemeral: true});
+            }
         }
         else if (interaction.customId === "modded") {
-            await interaction.member.roles.add("1017137564496441374");
-            await interaction.reply({content: "Vous avez choisi le rôle *Moddé* !", ephemeral: true});
+            if (!interaction.member.roles.cache.some(r => r.id === "1017137564496441374")) {
+                await interaction.member.roles.add("1017137564496441374");
+                await interaction.reply({content: "Vous avez choisi le rôle *Moddé* !", ephemeral: true});
+            }
+            else {
+                await interaction.member.roles.remove("1017137564496441374");
+                await interaction.reply({content: "Le rôle *Moddé* vous a bien été enlevé !", ephemeral: true});
+            }
+        }
+        else if (interaction.customId === "minijeux") {
+            if (!interaction.member.roles.cache.some(r => r.id === "1027288660120449045")) {
+                await interaction.member.roles.add("1027288660120449045");
+                await interaction.reply({content: "Vous avez choisi le rôle *Mini-jeux* !", ephemeral: true});
+            }
+            else {
+                await interaction.member.roles.remove("1027288660120449045");
+                await interaction.reply({content: "Le rôle *Mini-jeux* vous a bien été enlevé !", ephemeral: true});
+            }
         }
 
         // BOUTONS - PROMOS
