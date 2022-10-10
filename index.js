@@ -109,7 +109,7 @@ client.on('interactionCreate', async interaction => {
 
     // BOUTON - ACCEPTER LE REGLEMENT
     if (interaction.customId === "accept-rules") {
-        if (await interaction.member.roles.cache.has("1018926458632146995")) {
+        if (await interaction.member.roles.cache.has("1018926458632146995") || await interaction.member.roles.cache.has("1018926567902158970")) {
             await interaction.reply({content: "Vous avez déjà accepté le règlement !", ephemeral: true});
             return;
         }
