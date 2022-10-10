@@ -34,17 +34,8 @@ module.exports = {
         console.log("BDD: " + process.env.DB_HOST + ":" + process.env.DB_PORT + " " + process.env.DB_NAME);
         const visiteur = await interaction.guild.roles.fetch('1018926458632146995');
         try {
-            console.log("Connecting...")
-            const conn = await pool.getConnection();
-            const rows = await conn.query("SELECT * FROM `visiteurs`");
-            await conn.release();
-            let alreadyIn = [];
-            for (const row of rows) {
-                alreadyIn.push(row.discordid);
-            }
-            console.log(alreadyIn);
             for (const m in visiteur.members) {
-                if (!alreadyIn.includes(visiteur.members[m].id)) {
+                try {
                     await pool.execute("INSERT INTO `members` (`discordid`, `rank`) VALUES (?, 'Visiteur')", [m]);
                     if (visiteur.members[m].roles.cache.has(roles.ancien)) {
                         await pool.execute("UPDATE `members` SET `isAncien` = '1' WHERE `discordid` = ?", [m]);
@@ -63,7 +54,7 @@ module.exports = {
                             break;
                         }
                     }
-                }
+                } catch {}
             }
             await interaction.reply({content: 'BDD fixée !'});
         } catch {
