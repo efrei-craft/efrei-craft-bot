@@ -33,9 +33,10 @@ module.exports = {
         try {
             const conn = await pool.getConnection();
             const rows = await conn.query("SELECT * FROM `visiteurs`");
+            await conn.release();
             let alreadyIn = [];
             for (const row of rows) {
-                alreadyIn.push(row.discord_id);
+                alreadyIn.push(row.discordid);
             }
             for (const m in visiteur.members) {
                 if (!alreadyIn.includes(visiteur.members[m].id)) {
