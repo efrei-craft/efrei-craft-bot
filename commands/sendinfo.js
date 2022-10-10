@@ -59,14 +59,27 @@ const channelInfos = {
             .addFields(
                 {
                     name: "\u200B",
-                    value: "<:minecraft:1016990742419357786> *Minecraft Vanilla :*\n\n" +
-                        "> **IP** : ``mc.onelots.fr``\n" +
-                        "> **Version du jeu** : ``1.12.2``\n\n" +
-                        "<:forge:1018855440337096765> *Minecraft Moddé :*\n\n" +
-                        "> **IP** : ``modded.onelots.fr``\n" +
-                        "> **Version du jeu** : ``1.16.5``\n" +
-                        "> **Modpack** : ``Enigmatica 6``\n" +
-                        "> **Version du Modpack** : ``1.5.1 (dernière version)``"
+                    value: "🖥️ **IP unique :** `efreicraft.fr`\n\n" +
+                        "<:minecraft:1016990742419357786> *Minecraft Vanilla :*\n" +
+                        "> ❤️ **Type** : ``Survie``\n" +
+                        "> 🗂️ **Version** : ``1.19.2``"
+                    /*"<:minecraft:1016990742419357786> *Minecraft Vanilla :*\n\n" +
+                        "<:forge:1018855440337096765> *Minecraft Moddé :*\n\n"*/
+                }
+            )
+    ],
+    "new-members": [
+        new EmbedBuilder()
+            .setColor(0x00a1e0)
+            .setTitle("Efrei Craft")
+            .setThumbnail("https://avatars.githubusercontent.com/u/113559229")
+            .addFields(
+                {
+                    name: "\u200B",
+                    value: "Pour obtenir tes rôles, clique sur le bouton ci-dessous !\n\n" +
+                        "> **ATTENTION** : Il te sera demandé ton nom, ton prénom ainsi que ton identifiant MyEfrei.\n" +
+                        "> Si tu ne les connais pas, assure-toi de t'en munir avant de cliquer sur le bouton !\n" +
+                        "> \u200B\n> Si tu as une question, n'hésite pas à contacter un membre du Bureau pour lui demander !"
                 }
             )
     ],
@@ -186,6 +199,26 @@ const channelComponents = {
                     .setLabel("J'accepte le règlement")
                     .setStyle(ButtonStyle.Success)
                     .setEmoji("💯")
+            )
+    ],
+    "infos": [
+        new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId("bind-mc")
+                    .setLabel("Lier mon compte Minecraft")
+                    .setStyle(ButtonStyle.Success)
+                    .setEmoji("🔗")
+            )
+    ],
+    "new-members": [
+        new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId("memberize")
+                    .setLabel("Compléter mon profil")
+                    .setStyle(ButtonStyle.Primary)
+                    .setEmoji("👤")
             )
     ],
     "roles": [

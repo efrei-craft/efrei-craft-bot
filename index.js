@@ -1,6 +1,17 @@
 const fs = require('fs');
 const { Client, Collection, GatewayIntentBits, ActivityType, InteractionType, InteractionResponse} = require('discord.js');
+const { ModalBuilder, ActionRowBuilder, TextInputBuilder } = require("@discordjs/builders");
+const mariadb = require("mariadb");
 require("dotenv").config();
+
+const pool = mariadb.createPool({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    connectionLimit: 5
+});
 
 const client = new Client({ intents: [GatewayIntentBits.DirectMessages, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers] });
 
@@ -55,14 +66,40 @@ client.on('interactionCreate', async interaction => {
             Comm: "1022771050125205605",
             Event: "1022778571976101938",
             Infra: "1027228270980243548",
-	    Build: "1028666709864882276"
-	};
-
+            Build: "1028666709864882276"
+        };
         let poleName = interaction.fields.getTextInputValue("poleName");
         poleName = poleName[0].toUpperCase() + poleName.slice(1).toLowerCase();
         const user = interaction.guild.members.cache.get(interaction.customId.split("addtopole-modal-")[1]);
         await user.roles.add(Pole[poleName]);
         await interaction.reply({content: "L'utilisateur <@" + user.id + "> a été ajouté au Pôle " + poleName + " avec succès !", ephemeral: true});
+    }
+
+    else if (interaction.customId === "bind-mc-modal") {
+        const mcName = interaction.fields.getTextInputValue("mcName");
+        const user = interaction.member.id;
+        const conn = await pool.getConnection();
+        const rows = await conn.query("SELECT * FROM discordmclink WHERE discordid = ?", [user]);
+        await conn.release();
+        if (rows.length > 0) {
+            await conn.query("UPDATE discordmclink SET mcaccount = ? WHERE discordid = ?", [mcName, user]);
+            await interaction.reply({content: "Votre compte Minecraft a été mis à jour avec succès", ephemeral: true});
+        }
+        else {
+            await pool.execute("INSERT INTO `discordmclink` (`discordid`, `mcaccount`) VALUES (?, ?)", [user, mcName]);
+            await interaction.reply({content: "Votre compte Minecraft a été lié avec succès !", ephemeral: true});
+        }
+    }
+
+    else if (interaction.customId === "memberize-modal") {
+        const discordID = interaction.member.id;
+        const firstName = interaction.fields.getTextInputValue("firstName");
+        const lastName = interaction.fields.getTextInputValue("lastName");
+        const EfreiID = interaction.fields.getTextInputValue("EfreiID");
+        await interaction.member.roles.remove("1028938423253356544");
+        await interaction.member.roles.add("1018926567902158970");
+        await pool.execute("UPDATE members SET first_name = ?, last_name = ?, rank = 'Membre', efreiid = ? WHERE discordid = ?", [firstName, lastName, EfreiID, discordID]);
+        await interaction.reply({content: "Votre profil a été mis à jour avec succès !", ephemeral: true});
     }
 });
 
@@ -77,18 +114,89 @@ client.on('interactionCreate', async interaction => {
             return;
         }
         await interaction.member.roles.add("1018926458632146995");
-        await interaction.reply({content: "**Bienvenue sur Efrei Craft !**\nVa dans <#1016986910268346379> pour choisir tes rôles !", ephemeral: true})
+        await pool.execute("INSERT INTO members VALUES (?, '', '', '', '0', '0', 'Visiteur', '0')", [interaction.member.id]);
+        await interaction.reply({content: "**Bienvenue sur Efrei Craft !**\nVa dans <#1016986910268346379> pour choisir tes rôles !", ephemeral: true});
+    }
+
+    // BOUTON - LIER SON COMPTE MINECRAFT
+    else if (interaction.customId === "bind-mc") {
+        const conn = await pool.getConnection();
+        const rows = await conn.query("SELECT * FROM discordmclink WHERE discordid = ?", [interaction.member.id]);
+        await conn.release();
+        let mcAccountValue = "";
+        if (rows.length > 0) {
+            mcAccountValue = rows[0].mcaccount;
+        }
+        const modal = new ModalBuilder()
+            .setTitle("Lier son compte Minecraft")
+            .setCustomId("bind-mc-modal")
+
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new TextInputBuilder()
+                    .setCustomId("mcName")
+                    .setPlaceholder("Pseudo Minecraft")
+                    .setLabel("Saisissez votre pseudo Minecraft :")
+                    .setValue(mcAccountValue)
+                    .setStyle(1)
+                    .setMinLength(3)
+                    .setMaxLength(16)
+            );
+        modal.addComponents(row);
+        await interaction.showModal(modal);
+    }
+
+    // BOUTON - DEVENIR MEMBRE
+    else if (interaction.customId === "memberize") {
+        const modal = new ModalBuilder()
+            .setTitle("Finaliser votre inscription")
+            .setCustomId("memberize-modal")
+
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new TextInputBuilder()
+                    .setCustomId("firstName")
+                    .setPlaceholder("Prénom (ex: Jean)")
+                    .setLabel("Saisissez votre prénom :")
+                    .setStyle(1)
+                    .setMinLength(2)
+                    .setMaxLength(20)
+            );
+        const row2 = new ActionRowBuilder()
+            .addComponents(
+                new TextInputBuilder()
+                    .setCustomId("lastName")
+                    .setPlaceholder("Nom de famille (ex: Dupont)")
+                    .setLabel("Saisissez votre nom :")
+                    .setStyle(1)
+                    .setMinLength(2)
+                    .setMaxLength(20)
+            );
+        const row3 = new ActionRowBuilder()
+            .addComponents(
+                new TextInputBuilder()
+                    .setCustomId("EfreiID")
+                    .setPlaceholder("Identifiant MyEfrei (XXXXXXXX)")
+                    .setLabel("Saisissez votre Identifiant MyEfrei :")
+                    .setStyle(1)
+                    .setMinLength(8)
+                    .setMaxLength(8)
+            );
+        modal.addComponents(row, row2, row3);
+        await interaction.showModal(modal);
     }
 
     // BOUTONS - VILLES
     else if (interaction.customId === "paris") {
         await interaction.member.roles.remove("1016966938934657084");
         await interaction.member.roles.add("1016966906340704276");
+        await pool.execute("UPDATE members SET ville = 'Paris' WHERE discordid = ?", [interaction.member.id]);
         await interaction.reply({content: "Vous avez choisi le rôle *Paris* !", ephemeral: true});
     }
     else if (interaction.customId === "bordeaux") {
         await interaction.member.roles.remove("1016966906340704276");
         await interaction.member.roles.add("1016966938934657084");
+        await pool.execute("UPDATE members SET ville = 'Bordeaux' WHERE discordid = ?", [interaction.member.id]);
         await interaction.reply({content: "Vous avez choisi le rôle *Bordeaux* !", ephemeral: true});
     }
 
@@ -130,6 +238,14 @@ client.on('interactionCreate', async interaction => {
             await interaction.member.roles.remove(promo_roles[i]);
         }
         await interaction.member.roles.add(promo_roles[interaction.customId]);
+        if (interaction.customId === "p-ancien") {
+            await pool.execute("UPDATE members SET promo = '0' WHERE discordid = ?", [interaction.member.id]);
+            await pool.execute("UPDATE members SET isAncien = '1' WHERE discordid = ?", [interaction.member.id]);
+        }
+        else {
+            await pool.execute("UPDATE members SET promo = ? WHERE discordid = ?", [interaction.customId.replace("p", ""), interaction.member.id]);
+            await pool.execute("UPDATE members SET isAncien = '0' WHERE discordid = ?", [interaction.member.id]);
+        }
         await interaction.reply({content: "Vous avez choisi le rôle *" + interaction.customId.toUpperCase() + "* !", ephemeral: true})
     }
 });
