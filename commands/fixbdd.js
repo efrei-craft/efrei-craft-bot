@@ -34,6 +34,7 @@ module.exports = {
         console.log("BDD: " + process.env.DB_HOST + ":" + process.env.DB_PORT + " " + process.env.DB_NAME);
         const visiteur = await interaction.guild.roles.fetch('1018926458632146995');
         try {
+            console.log("Connecting...")
             const conn = await pool.getConnection();
             const rows = await conn.query("SELECT * FROM `visiteurs`");
             await conn.release();
@@ -41,6 +42,7 @@ module.exports = {
             for (const row of rows) {
                 alreadyIn.push(row.discordid);
             }
+            console.log(alreadyIn);
             for (const m in visiteur.members) {
                 if (!alreadyIn.includes(visiteur.members[m].id)) {
                     await pool.execute("INSERT INTO `members` (`discordid`, `rank`) VALUES (?, 'Visiteur')", [m]);
