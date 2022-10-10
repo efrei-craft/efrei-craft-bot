@@ -41,18 +41,22 @@ module.exports = {
                         await pool.execute("UPDATE `members` SET `isAncien` = '1' WHERE `discordid` = ?", [m]);
                     }
                     else {
-                        for (let p in roles.promos) {
-                            if (visiteur.members[m].roles.cache.has(roles.promos[p])) {
-                                await pool.execute("UPDATE `members` SET `promo` = ? WHERE `discordid` = ?", [p, m]);
-                                break;
+                        try {
+                            for (let p in roles.promos) {
+                                if (visiteur.members[m].roles.cache.has(roles.promos[p])) {
+                                    await pool.execute("UPDATE `members` SET `promo` = ? WHERE `discordid` = ?", [p, m]);
+                                    break;
+                                }
                             }
-                        }
+                        } catch {}
                     }
                     for (let v in roles.villes) {
-                        if (visiteur.members[m].roles.cache.has(roles.villes[v])) {
-                            await pool.execute("UPDATE `members` SET `ville` = ? WHERE `discordid` = ?", [v, m]);
-                            break;
-                        }
+                        try {
+                            if (visiteur.members[m].roles.cache.has(roles.villes[v])) {
+                                await pool.execute("UPDATE `members` SET `ville` = ? WHERE `discordid` = ?", [v, m]);
+                                break;
+                            }
+                        } catch {}
                     }
                 } catch {}
             }
