@@ -60,7 +60,9 @@ module.exports = {
                     }
                 }
             }
-            await interaction.reply('BDD fixée !');
-        } catch {}
+            await interaction.reply({content: 'BDD fixée !'});
+        } catch {
+            await interaction.reply({content: 'Erreur lors de la connexion à la BDD'});
+        }
     },
 };
