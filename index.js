@@ -28,72 +28,9 @@ client.once('ready', () => {
     client.user.setPresence({status: "online", activities: [{ name: "Minecraft | mc.onelots.fr | modded.onelots.fr", type: ActivityType.Playing}]});
 });
 
+// COMMANDS
 client.on('interactionCreate', async interaction => {
-    if (interaction.isButton()) {
-        // BOUTON - ACCEPTER LE REGLEMENT
-        if (interaction.customId === "accept-rules") {
-            if (await interaction.member.roles.cache.has("1018926458632146995")) {
-                await interaction.reply({content: "Vous avez déjà accepté le règlement !", ephemeral: true});
-                return;
-            }
-            await interaction.member.roles.add("1018926458632146995");
-            await interaction.reply({content: "**Bienvenue sur Efrei Craft !**\nVa dans <#1016986910268346379> pour choisir tes rôles !", ephemeral: true})
-        }
-
-        // BOUTONS - VILLES
-        else if (interaction.customId === "paris") {
-            await interaction.member.roles.remove("1016966938934657084");
-            await interaction.member.roles.add("1016966906340704276");
-            await interaction.reply({content: "Vous avez choisi le rôle *Paris* !", ephemeral: true});
-        }
-        else if (interaction.customId === "bordeaux") {
-            await interaction.member.roles.remove("1016966906340704276");
-            await interaction.member.roles.add("1016966938934657084");
-            await interaction.reply({content: "Vous avez choisi le rôle *Bordeaux* !", ephemeral: true});
-        }
-
-        // BOUTONS - VERSIONS DE MINECRAFT
-        else if (interaction.customId === "vanilla") {
-            if (!interaction.member.roles.cache.some(r => r.id === "1017137520263311500")) {
-                await interaction.member.roles.add("1017137520263311500");
-                await interaction.reply({content: "Vous avez choisi le rôle *Vanilla* !", ephemeral: true});
-            }
-            else {
-                await interaction.member.roles.remove("1017137520263311500");
-                await interaction.reply({content: "Le rôle *Vanilla* vous a bien été enlevé !", ephemeral: true});
-            }
-        }
-        else if (interaction.customId === "modded") {
-            if (!interaction.member.roles.cache.some(r => r.id === "1017137564496441374")) {
-                await interaction.member.roles.add("1017137564496441374");
-                await interaction.reply({content: "Vous avez choisi le rôle *Moddé* !", ephemeral: true});
-            }
-            else {
-                await interaction.member.roles.remove("1017137564496441374");
-                await interaction.reply({content: "Le rôle *Moddé* vous a bien été enlevé !", ephemeral: true});
-            }
-        }
-        else if (interaction.customId === "minijeux") {
-            if (!interaction.member.roles.cache.some(r => r.id === "1027288660120449045")) {
-                await interaction.member.roles.add("1027288660120449045");
-                await interaction.reply({content: "Vous avez choisi le rôle *Mini-jeux* !", ephemeral: true});
-            }
-            else {
-                await interaction.member.roles.remove("1027288660120449045");
-                await interaction.reply({content: "Le rôle *Mini-jeux* vous a bien été enlevé !", ephemeral: true});
-            }
-        }
-
-        // BOUTONS - PROMOS
-        else if (interaction.customId.startsWith("p")) {
-            for (let i in promo_roles) {
-                await interaction.member.roles.remove(promo_roles[i]);
-            }
-            await interaction.member.roles.add(promo_roles[interaction.customId]);
-            await interaction.reply({content: "Vous avez choisi le rôle *" + interaction.customId.toUpperCase() + "* !", ephemeral: true})
-        }
-        return;
-    }
+    if (!interaction.isCommand() && !interaction.isAutocomplete()) return;
 
     const command = client.commands.get(interaction.commandName);
 
@@ -104,6 +41,96 @@ client.on('interactionCreate', async interaction => {
     } catch (error) {
         console.error(error);
         await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+    }
+});
+
+// MODALS
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isModalSubmit()) return;
+
+    if (interaction.customId.startsWith("addtopole-modal-")) {
+        const Pole = {
+            Design: "1019716929390383164",
+            Dev: "1019717015893721179",
+            Comm: "1022771050125205605",
+            Event: "1022778571976101938",
+            Infra: "1027228270980243548",
+	    Build: "1028666709864882276"
+	};
+
+        let poleName = interaction.fields.getTextInputValue("poleName");
+        poleName = poleName[0].toUpperCase() + poleName.slice(1).toLowerCase();
+        const user = interaction.guild.members.cache.get(interaction.customId.split("addtopole-modal-")[1]);
+        await user.roles.add(Pole[poleName]);
+        await interaction.reply({content: "L'utilisateur <@" + user.id + "> a été ajouté au Pôle " + poleName + " avec succès !", ephemeral: true});
+    }
+});
+
+// BOUTONS
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isButton()) return;
+
+    // BOUTON - ACCEPTER LE REGLEMENT
+    if (interaction.customId === "accept-rules") {
+        if (await interaction.member.roles.cache.has("1018926458632146995")) {
+            await interaction.reply({content: "Vous avez déjà accepté le règlement !", ephemeral: true});
+            return;
+        }
+        await interaction.member.roles.add("1018926458632146995");
+        await interaction.reply({content: "**Bienvenue sur Efrei Craft !**\nVa dans <#1016986910268346379> pour choisir tes rôles !", ephemeral: true})
+    }
+
+    // BOUTONS - VILLES
+    else if (interaction.customId === "paris") {
+        await interaction.member.roles.remove("1016966938934657084");
+        await interaction.member.roles.add("1016966906340704276");
+        await interaction.reply({content: "Vous avez choisi le rôle *Paris* !", ephemeral: true});
+    }
+    else if (interaction.customId === "bordeaux") {
+        await interaction.member.roles.remove("1016966906340704276");
+        await interaction.member.roles.add("1016966938934657084");
+        await interaction.reply({content: "Vous avez choisi le rôle *Bordeaux* !", ephemeral: true});
+    }
+
+    // BOUTONS - VERSIONS DE MINECRAFT
+    else if (interaction.customId === "vanilla") {
+        if (!interaction.member.roles.cache.some(r => r.id === "1017137520263311500")) {
+            await interaction.member.roles.add("1017137520263311500");
+            await interaction.reply({content: "Vous avez choisi le rôle *Vanilla* !", ephemeral: true});
+        }
+        else {
+            await interaction.member.roles.remove("1017137520263311500");
+            await interaction.reply({content: "Le rôle *Vanilla* vous a bien été enlevé !", ephemeral: true});
+        }
+    }
+    else if (interaction.customId === "modded") {
+        if (!interaction.member.roles.cache.some(r => r.id === "1017137564496441374")) {
+            await interaction.member.roles.add("1017137564496441374");
+            await interaction.reply({content: "Vous avez choisi le rôle *Moddé* !", ephemeral: true});
+        }
+        else {
+            await interaction.member.roles.remove("1017137564496441374");
+            await interaction.reply({content: "Le rôle *Moddé* vous a bien été enlevé !", ephemeral: true});
+        }
+    }
+    else if (interaction.customId === "minijeux") {
+        if (!interaction.member.roles.cache.some(r => r.id === "1027288660120449045")) {
+            await interaction.member.roles.add("1027288660120449045");
+            await interaction.reply({content: "Vous avez choisi le rôle *Mini-jeux* !", ephemeral: true});
+        }
+        else {
+            await interaction.member.roles.remove("1027288660120449045");
+            await interaction.reply({content: "Le rôle *Mini-jeux* vous a bien été enlevé !", ephemeral: true});
+        }
+    }
+
+    // BOUTONS - PROMOS
+    else if (interaction.customId.startsWith("p")) {
+        for (let i in promo_roles) {
+            await interaction.member.roles.remove(promo_roles[i]);
+        }
+        await interaction.member.roles.add(promo_roles[interaction.customId]);
+        await interaction.reply({content: "Vous avez choisi le rôle *" + interaction.customId.toUpperCase() + "* !", ephemeral: true})
     }
 });
 

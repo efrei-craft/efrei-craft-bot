@@ -1,4 +1,5 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+// const { SlashCommandBuilder } = require('@discordjs/builders');
+const { ContextMenuCommandBuilder, ModalBuilder, ActionRowBuilder, TextInputBuilder } = require("@discordjs/builders");
 
 const Pole = {
     Design: "1019716929390383164",
@@ -8,49 +9,28 @@ const Pole = {
     Infra: "1027228270980243548"
 }
 
-const Respo = {
-    Design: "478983992834523166",
-    Dev: "372783754025893889",
-    Comm: "411912136948973579",
-    Event: "280682698740203521",
-    Infra: "723644603701395546"
-}
-
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('addtopole')
-        .setDescription('Ajoute quelqu\'un à votre pôle')
-        .addUserOption(option => option.setName("utilisateur").setDescription("Utilisateur à ajouter à votre pôle").setRequired(true))
-    ,
+    data: new ContextMenuCommandBuilder()
+        .setName("Ajouter à un pôle")
+        .setType(2),
     async execute(interaction) {
-        if (interaction.member.roles.cache.some(r => r.name === "Bureau étendu") || interaction.member.roles.cache.some(r => r.name === "Bureau restreint")) {
-            const user = interaction.options.getMember("utilisateur");
-            let p = "";
-            if (interaction.member.id === Respo.Design) {
-                p = "Design";
-            }
-            else if (interaction.member.id === Respo.Dev) {
-                p = "Dev";
-            }
-            else if (interaction.member.id === Respo.Comm) {
-                p = "Comm";
-            }
-            else if (interaction.member.id === Respo.Event) {
-                p = "Event";
-            }
-            else if (interaction.member.id === Respo.Infra) {
-                p = "Infra";
-            }
-            if (p !== "") {
-                user.roles.add(Pole[p]);
-                interaction.reply({content: "L'utilisateur <@" + user.id + "> a été ajouté au Pôle " + p + " avec succès !", ephemeral: true})
-            }
-            else {
-                interaction.reply({content: "Vous n'êtes pas responsable d'un pôle !", ephemeral: true})
-            }
-        }
-        else {
-            await interaction.reply({content: "**Vous n'avez pas la permission d'utiliser cette commande !**", ephemeral: true });
-        }
-    },
-};
+        const user = interaction.targetMember;
+        const admin = interaction.member;
+        const modal = new ModalBuilder()
+            .setCustomId("addtopole-modal-" + user.id)
+            .setTitle("Ajouter " + user.displayName + " à un pôle")
+
+        const poleRow = new ActionRowBuilder()
+            .addComponents(
+                new TextInputBuilder()
+                    .setPlaceholder("Entrez le nom du pôle")
+                    .setCustomId("poleName")
+                    .setLabel("Nom du Pôle")
+                    .setStyle(1)
+                    .setRequired(true)
+            );
+
+        modal.addComponents(poleRow);
+        await interaction.showModal(modal);
+    }
+}

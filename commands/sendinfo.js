@@ -286,15 +286,10 @@ module.exports = {
             }
         }
         else { // Execute command
-            if (interaction.member.roles.cache.some(r => r.name === "Bureau restreint")) {
-                const channelName = interaction.options.getString("channel");
-                const channel = interaction.channel;
-                await channel.send({ embeds: channelInfos[channelName], components: channelComponents[channelName] });
-                await interaction.reply({content: "**Message envoyé avec succès !**", ephemeral: true})
-            }
-            else {
-                await interaction.reply({content: "**Vous n'avez pas la permission d'utiliser cette commande !**", ephemeral: true });
-            }
+            const channelName = interaction.options.getString("channel");
+            const channel = interaction.channel;
+            await channel.send({ embeds: channelInfos[channelName], components: channelComponents[channelName] });
+            await interaction.reply({content: "**Message envoyé avec succès !**", ephemeral: true})
         }
     },
 };
