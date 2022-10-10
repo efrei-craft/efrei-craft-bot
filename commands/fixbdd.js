@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const mariadb = require('mariadb');
+require("dotenv").config();
 const pool = mariadb.createPool({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
@@ -29,6 +30,8 @@ module.exports = {
         .setName('fixbdd')
         .setDescription('Règle les problèmes de synchronisation avec la BDD'),
     async execute(interaction) {
+        console.log("Fixing BDD");
+        console.log("BDD: " + process.env.DB_HOST + ":" + process.env.DB_PORT + " " + process.env.DB_NAME);
         const visiteur = await interaction.guild.roles.fetch('1018926458632146995');
         try {
             const conn = await pool.getConnection();
