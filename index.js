@@ -36,7 +36,7 @@ for (const file of commandFiles) {
 
 client.once('ready', () => {
     console.log('Successfully logged in!');
-    client.user.setPresence({status: "online", activities: [{ name: "Minecraft | mc.onelots.fr | modded.onelots.fr", type: ActivityType.Playing}]});
+    client.user.setPresence({status: "online", activities: [{ name: "Minecraft | efreicraft.fr", type: ActivityType.Playing}]});
 });
 
 // COMMANDS
@@ -114,7 +114,11 @@ client.on('interactionCreate', async interaction => {
             return;
         }
         await interaction.member.roles.add("1018926458632146995");
-        await pool.execute("INSERT INTO members VALUES (?, '', '', '', '0', '0', 'Visiteur', '0')", [interaction.member.id]);
+        try {
+            await pool.execute("INSERT INTO members VALUES (?, '', '', '', '0', '0', 'Visiteur', '0')", [interaction.member.id]);
+        } catch {
+            return interaction.reply({content: "**Bon retour parmi nous !**\nVa dans <#1016986910268346379> pour choisir tes rôles !", ephemeral: true});
+        }
         await interaction.reply({content: "**Bienvenue sur Efrei Craft !**\nVa dans <#1016986910268346379> pour choisir tes rôles !", ephemeral: true});
     }
 
