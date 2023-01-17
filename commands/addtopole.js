@@ -4,9 +4,7 @@ const { ContextMenuCommandBuilder, ModalBuilder, ActionRowBuilder, TextInputBuil
 const Pole = {
     Design: "1019716929390383164",
     Dev: "1019717015893721179",
-    Comm: "1022771050125205605",
-    Event: "1022778571976101938",
-    Infra: "1027228270980243548"
+    Build: "1028666709864882276"
 }
 
 module.exports = {

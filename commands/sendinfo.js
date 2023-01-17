@@ -62,7 +62,7 @@ const channelInfos = {
                     value: "🖥️ **IP unique :** `efreicraft.fr`\n\n" +
                         "<:minecraft:1016990742419357786> *Minecraft Vanilla :*\n" +
                         "> ❤️ **Type** : ``Survie``\n" +
-                        "> 🗂️ **Version** : ``1.19.2``"
+                        "> 🗂️ **Version** : ``1.19.3``"
                     /*"<:minecraft:1016990742419357786> *Minecraft Vanilla :*\n\n" +
                         "<:forge:1018855440337096765> *Minecraft Moddé :*\n\n"*/
                 }
