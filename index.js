@@ -2,7 +2,7 @@ const fs = require('fs');
 const { Client, Collection, GatewayIntentBits, ActivityType, InteractionType, InteractionResponse} = require('discord.js');
 const { ModalBuilder, ActionRowBuilder, TextInputBuilder } = require("@discordjs/builders");
 const mariadb = require("mariadb");
-require("dotenv").config();
+require("./deploy-commands");
 
 const pool = mariadb.createPool({
     host: process.env.DB_HOST,
