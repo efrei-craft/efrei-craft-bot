@@ -132,16 +132,21 @@ client.on('interactionCreate', async interaction => {
             .setTitle("Lier son compte Minecraft")
             .setCustomId("bind-mc-modal")
 
+        const mcNameInput = new TextInputBuilder()
+            .setCustomId("mcName")
+            .setPlaceholder("Pseudo Minecraft")
+            .setLabel("Saisissez votre pseudo Minecraft :")
+            .setStyle(1)
+            .setMinLength(3)
+            .setMaxLength(16)
+
+        if (mcAccountValue !== "") {
+            mcNameInput.setValue(mcAccountValue);
+        }
+
         const row = new ActionRowBuilder()
             .addComponents(
-                new TextInputBuilder()
-                    .setCustomId("mcName")
-                    .setPlaceholder("Pseudo Minecraft")
-                    .setLabel("Saisissez votre pseudo Minecraft :")
-                    .setValue(mcAccountValue)
-                    .setStyle(1)
-                    .setMinLength(3)
-                    .setMaxLength(16)
+                mcNameInput
             );
         modal.addComponents(row);
         await interaction.showModal(modal);
