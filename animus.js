@@ -25,6 +25,8 @@ module.exports = {
         return (await instance.get("/member/" + discordId)).data;
     },
     updateMember: async function(discordId, data) {
+        console.log("discordId: ", discordId)
+        console.log("data: ", data)
         return (await instance.patch("/member/" + discordId + "/update", data)).data;
     },
     getGroups: async function() {
