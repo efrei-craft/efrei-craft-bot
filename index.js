@@ -27,9 +27,13 @@ for (const file of commandFiles) {
 }
 
 async function getMcUUID(username) {
-    const res = await fetch("https://api.mojang.com/users/profiles/minecraft/" + username);
-    const data = await res.json();
-    return data.id;
+    let res = await fetch(`https://playerdb.co/api/player/minecraft/${username}`, {
+        headers: {
+            'User-Agent': 'OccasionalImportEfreiCraft/1.0.0'
+        }
+    });
+    let { data: { player } } = await res.json();
+    return player.id
 }
 
 async function getUserRanks(discordMember) {
