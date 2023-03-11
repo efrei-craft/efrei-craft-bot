@@ -27,20 +27,6 @@ module.exports = {
     updateMember: async function(discordId, data) {
         return (await instance.patch("/member/" + discordId + "/update", data)).data;
     },
-    createPlayer: async function (discordId, minecraftUsername, minecraftUuid, permGroups) {
-        const player = {};
-        player.memberDiscordId = discordId;
-        player.username = minecraftUsername;
-        player.uuid = minecraftUuid;
-        player.permGroups = permGroups;
-        return (await instance.post("/players", player)).data;
-    },
-    getPlayer: async function(discordId) {
-        return (await instance.get("/member/" + discordId + "/player")).data;
-    },
-    updatePlayer: async function(discordId, data) {
-        return (await instance.patch("/member/" + discordId + "/update", data)).data;
-    },
     getGroups: async function() {
         return (await instance.get("/permissions/groups")).data;
     }

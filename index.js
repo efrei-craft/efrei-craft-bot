@@ -83,15 +83,18 @@ client.on('interactionCreate', async interaction => {
     else if (interaction.customId === "bind-mc-modal") {
         const mcName = interaction.fields.getTextInputValue("mcName");
         const user = interaction.member.id;
-        const player = await animus.getPlayer(user);
+        const member = await animus.getMember(user);
+        const player = member.player;
         if (player) {
             // player is already existing, update it
-            await animus.updatePlayer(user, {username: mcName, uuid: await getMcUUID(mcName)});
+            player.username = mcName;
+            player.uuid = await getMcUUID(mcName);
+            await animus.updateMember(user, {player: player});
             await interaction.reply({content: "Votre compte Minecraft a été mis à jour avec succès", ephemeral: true});
         }
         else {
             // player is not existing, create it
-            await animus.createPlayer(user, await getMcUUID(mcName), mcName, await getUserRanks(interaction.member));
+            await animus.updateMember(user, {player: {uuid: await getMcUUID(mcName), username: mcName, permGroups: await getUserRanks(interaction.member), perms: [], lastSeen: new Date(), chatChannel: "SERVER"}});
             await interaction.reply({content: "Votre compte Minecraft a été lié avec succès", ephemeral: true});
         }
     }
@@ -102,8 +105,11 @@ client.on('interactionCreate', async interaction => {
         const lastName = interaction.fields.getTextInputValue("lastName");
         await interaction.member.roles.remove("1028938423253356544");
         await interaction.member.roles.add("1018926567902158970");
-        await animus.updateMember(discordID, {firstName: firstName, lastName: lastName});
-        await animus.updatePlayer(discordID, {permGroups: await getUserRanks(interaction.member)});
+        const member = await animus.getMember(discordID);
+        member.firstName = firstName;
+        member.lastName = lastName;
+        member.player.permGroups = await getUserRanks(interaction.member);
+        await animus.updateMember(discordID, member);
         await interaction.reply({content: "Votre profil a été mis à jour avec succès !", ephemeral: true});
     }
 });
@@ -130,7 +136,7 @@ client.on('interactionCreate', async interaction => {
 
     // BOUTON - LIER SON COMPTE MINECRAFT
     else if (interaction.customId === "bind-mc") {
-        const player = await animus.getPlayer(interaction.member.id);
+        const player = (await animus.getMember(interaction.member.id)).player;
         let mcAccountValue = "";
         if (player) {
             mcAccountValue = player.username;
