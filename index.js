@@ -123,7 +123,7 @@ client.on('interactionCreate', async interaction => {
             return interaction.reply({content: "**Bon retour parmi nous !**\nVa dans <#1016986910268346379> pour choisir tes rôles !", ephemeral: true});
         }
         else {
-            await animus.createMember(interaction.member.id, null, null, null);
+            await animus.createMember(interaction.member.id, "", "", 0);
             await interaction.reply({content: "**Bienvenue sur Efrei Craft !**\nVa dans <#1016986910268346379> pour choisir tes rôles !", ephemeral: true});
         }
     }
