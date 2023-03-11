@@ -1,17 +1,8 @@
 const fs = require('fs');
-const { Client, Collection, GatewayIntentBits, ActivityType, InteractionType, InteractionResponse} = require('discord.js');
+const { Client, Collection, GatewayIntentBits, ActivityType} = require('discord.js');
 const { ModalBuilder, ActionRowBuilder, TextInputBuilder } = require("@discordjs/builders");
-const mariadb = require("mariadb");
+const animus = require("./animus");
 require("./deploy-commands");
-
-const pool = mariadb.createPool({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-    connectionLimit: 5
-});
 
 const client = new Client({ intents: [GatewayIntentBits.DirectMessages, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers] });
 
@@ -32,6 +23,23 @@ for (const file of commandFiles) {
     // Set a new item in the Collection
     // With the key as the command name and the value as the exported module
     client.commands.set(command.data.name, command);
+}
+
+async function getMcUUID(username) {
+    const res = await fetch("https://api.mojang.com/users/profiles/minecraft/" + username);
+    const data = await res.json();
+    return data.id;
+}
+
+async function getUserRanks(discordMember) {
+    let ranks = [];
+    const availableGroups = await animus.getGroups();
+    for (const role of discordMember.roles.cache.values()) {
+        if (role.name in availableGroups.map((g) => g.name)) {
+            ranks.push(role.name);
+        }
+    }
+    return ranks;
 }
 
 client.once('ready', () => {
@@ -75,16 +83,16 @@ client.on('interactionCreate', async interaction => {
     else if (interaction.customId === "bind-mc-modal") {
         const mcName = interaction.fields.getTextInputValue("mcName");
         const user = interaction.member.id;
-        const conn = await pool.getConnection();
-        const rows = await conn.query("SELECT * FROM discordmclink WHERE discordid = ?", [user]);
-        await conn.release();
-        if (rows.length > 0) {
-            await conn.query("UPDATE discordmclink SET mcaccount = ? WHERE discordid = ?", [mcName, user]);
+        const player = await animus.getPlayer(user);
+        if (player) {
+            // player is already existing, update it
+            await animus.updatePlayer(user, {username: mcName, uuid: await getMcUUID(mcName)});
             await interaction.reply({content: "Votre compte Minecraft a été mis à jour avec succès", ephemeral: true});
         }
         else {
-            await pool.execute("INSERT INTO `discordmclink` (`discordid`, `mcaccount`) VALUES (?, ?)", [user, mcName]);
-            await interaction.reply({content: "Votre compte Minecraft a été lié avec succès !", ephemeral: true});
+            // player is not existing, create it
+            await animus.createPlayer(user, await getMcUUID(mcName), mcName, await getUserRanks(interaction.member));
+            await interaction.reply({content: "Votre compte Minecraft a été lié avec succès", ephemeral: true});
         }
     }
 
@@ -92,10 +100,10 @@ client.on('interactionCreate', async interaction => {
         const discordID = interaction.member.id;
         const firstName = interaction.fields.getTextInputValue("firstName");
         const lastName = interaction.fields.getTextInputValue("lastName");
-        const EfreiID = interaction.fields.getTextInputValue("EfreiID");
         await interaction.member.roles.remove("1028938423253356544");
         await interaction.member.roles.add("1018926567902158970");
-        await pool.execute("UPDATE members SET first_name = ?, last_name = ?, rank = 'Membre', efreiid = ? WHERE discordid = ?", [firstName, lastName, EfreiID, discordID]);
+        await animus.updateMember(discordID, {firstName: firstName, lastName: lastName});
+        await animus.updatePlayer(discordID, {permGroups: await getUserRanks(interaction.member)});
         await interaction.reply({content: "Votre profil a été mis à jour avec succès !", ephemeral: true});
     }
 });
@@ -111,22 +119,21 @@ client.on('interactionCreate', async interaction => {
             return;
         }
         await interaction.member.roles.add("1018926458632146995");
-        try {
-            await pool.execute("INSERT INTO members VALUES (?, '', '', '', '0', '0', 'Visiteur', '0')", [interaction.member.id]);
-        } catch {
+        if (await animus.getMember(interaction.member.id)) {
             return interaction.reply({content: "**Bon retour parmi nous !**\nVa dans <#1016986910268346379> pour choisir tes rôles !", ephemeral: true});
         }
-        await interaction.reply({content: "**Bienvenue sur Efrei Craft !**\nVa dans <#1016986910268346379> pour choisir tes rôles !", ephemeral: true});
+        else {
+            await animus.createMember(interaction.member.id, null, null, null);
+            await interaction.reply({content: "**Bienvenue sur Efrei Craft !**\nVa dans <#1016986910268346379> pour choisir tes rôles !", ephemeral: true});
+        }
     }
 
     // BOUTON - LIER SON COMPTE MINECRAFT
     else if (interaction.customId === "bind-mc") {
-        const conn = await pool.getConnection();
-        const rows = await conn.query("SELECT * FROM discordmclink WHERE discordid = ?", [interaction.member.id]);
-        await conn.release();
+        const player = await animus.getPlayer(interaction.member.id);
         let mcAccountValue = "";
-        if (rows.length > 0) {
-            mcAccountValue = rows[0].mcaccount;
+        if (player) {
+            mcAccountValue = player.username;
         }
         const modal = new ModalBuilder()
             .setTitle("Lier son compte Minecraft")
@@ -178,17 +185,7 @@ client.on('interactionCreate', async interaction => {
                     .setMinLength(2)
                     .setMaxLength(20)
             );
-        const row3 = new ActionRowBuilder()
-            .addComponents(
-                new TextInputBuilder()
-                    .setCustomId("EfreiID")
-                    .setPlaceholder("Identifiant MyEfrei (XXXXXXXX)")
-                    .setLabel("Saisissez votre Identifiant MyEfrei :")
-                    .setStyle(1)
-                    .setMinLength(8)
-                    .setMaxLength(8)
-            );
-        modal.addComponents(row, row2, row3);
+        modal.addComponents(row, row2);
         await interaction.showModal(modal);
     }
 
@@ -196,13 +193,11 @@ client.on('interactionCreate', async interaction => {
     else if (interaction.customId === "paris") {
         await interaction.member.roles.remove("1016966938934657084");
         await interaction.member.roles.add("1016966906340704276");
-        await pool.execute("UPDATE members SET ville = 'Paris' WHERE discordid = ?", [interaction.member.id]);
         await interaction.reply({content: "Vous avez choisi le rôle *Paris* !", ephemeral: true});
     }
     else if (interaction.customId === "bordeaux") {
         await interaction.member.roles.remove("1016966906340704276");
         await interaction.member.roles.add("1016966938934657084");
-        await pool.execute("UPDATE members SET ville = 'Bordeaux' WHERE discordid = ?", [interaction.member.id]);
         await interaction.reply({content: "Vous avez choisi le rôle *Bordeaux* !", ephemeral: true});
     }
 
@@ -245,12 +240,10 @@ client.on('interactionCreate', async interaction => {
         }
         await interaction.member.roles.add(promo_roles[interaction.customId]);
         if (interaction.customId === "p-ancien") {
-            await pool.execute("UPDATE members SET promo = '0' WHERE discordid = ?", [interaction.member.id]);
-            await pool.execute("UPDATE members SET isAncien = '1' WHERE discordid = ?", [interaction.member.id]);
+            await animus.updateMember(interaction.member.id, {promo: -1});
         }
         else {
-            await pool.execute("UPDATE members SET promo = ? WHERE discordid = ?", [interaction.customId.replace("p", ""), interaction.member.id]);
-            await pool.execute("UPDATE members SET isAncien = '0' WHERE discordid = ?", [interaction.member.id]);
+            await animus.updateMember(interaction.member.id, {promo: parseInt(interaction.customId.replace("p", ""))});
         }
         await interaction.reply({content: "Vous avez choisi le rôle *" + interaction.customId.toUpperCase() + "* !", ephemeral: true})
     }
