@@ -91,12 +91,12 @@ client.on('interactionCreate', async interaction => {
             player.username = mcName;
             player.uuid = await getMcUUID(mcName);
             await animus.updateMember(user, {player: player});
-            await interaction.reply({content: "Votre compte Minecraft a été mis à jour avec succès", ephemeral: true});
+            await interaction.editReply({content: "Votre compte Minecraft a été mis à jour avec succès"});
         }
         else {
             // player is not existing, create it
             await animus.updateMember(user, {player: {uuid: await getMcUUID(mcName), username: mcName, permGroups: await getUserRanks(interaction.member), perms: [], lastSeen: new Date(), chatChannel: "SERVER"}});
-            await interaction.reply({content: "Votre compte Minecraft a été lié avec succès", ephemeral: true});
+            await interaction.editReply({content: "Votre compte Minecraft a été lié avec succès"});
         }
     }
 
@@ -112,7 +112,7 @@ client.on('interactionCreate', async interaction => {
         member.lastName = lastName;
         member.player.permGroups = await getUserRanks(interaction.member);
         await animus.updateMember(discordID, member);
-        await interaction.reply({content: "Votre profil a été mis à jour avec succès !", ephemeral: true});
+        await interaction.editReply({content: "Votre profil a été mis à jour avec succès !"});
     }
 });
 
@@ -124,22 +124,21 @@ client.on('interactionCreate', async interaction => {
     if (interaction.customId === "accept-rules") {
         await interaction.deferReply({ephemeral: true});
         if (await interaction.member.roles.cache.has("1018926458632146995") || await interaction.member.roles.cache.has("1018926567902158970")) {
-            await interaction.reply({content: "Vous avez déjà accepté le règlement !", ephemeral: true});
+            await interaction.editReply({content: "Vous avez déjà accepté le règlement !"});
             return;
         }
         await interaction.member.roles.add("1018926458632146995");
         if (await animus.getMember(interaction.member.id)) {
-            return interaction.reply({content: "**Bon retour parmi nous !**\nVa dans <#1016986910268346379> pour choisir tes rôles !", ephemeral: true});
+            return interaction.editReply({content: "**Bon retour parmi nous !**\nVa dans <#1016986910268346379> pour choisir tes rôles !"});
         }
         else {
             await animus.createMember(interaction.member.id, "", "", 0);
-            await interaction.reply({content: "**Bienvenue sur Efrei Craft !**\nVa dans <#1016986910268346379> pour choisir tes rôles !", ephemeral: true});
+            await interaction.editReply({content: "**Bienvenue sur Efrei Craft !**\nVa dans <#1016986910268346379> pour choisir tes rôles !"});
         }
     }
 
     // BOUTON - LIER SON COMPTE MINECRAFT
     else if (interaction.customId === "bind-mc") {
-        await interaction.deferReply({ephemeral: true});
         const player = (await animus.getMember(interaction.member.id)).player;
         let mcAccountValue = "";
         if (player) {
@@ -256,7 +255,7 @@ client.on('interactionCreate', async interaction => {
         else {
             await animus.updateMember(interaction.member.id, {promo: parseInt(interaction.customId.replace("p", ""))});
         }
-        await interaction.reply({content: "Vous avez choisi le rôle *" + interaction.customId.toUpperCase() + "* !", ephemeral: true})
+        await interaction.editReply({content: "Vous avez choisi le rôle *" + interaction.customId.toUpperCase() + "* !"});
     }
 });
 
