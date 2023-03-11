@@ -47,10 +47,18 @@ module.exports = {
         })).data;
     },
     getPlayerFromDiscordId: async function (discordId) {
-        return (await instance.get("/member/" + discordId + "/player")).data;
+        try {
+            return (await instance.get("/member/" + discordId + "/player")).data;
+        } catch {
+            return null;
+        }
     },
     getPlayerFromUuid: async function (uuid) {
-        return (await instance.get("/players/" + uuid)).data;
+        try {
+            return (await instance.get("/players/" + uuid)).data;
+        } catch {
+            return null;
+        }
     },
     migratePlayer: async function (oldUuid, newUuid, newUsername) {
         return (await instance.patch("/players/" + oldUuid + "/migrate", {
