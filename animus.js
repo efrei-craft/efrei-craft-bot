@@ -47,7 +47,7 @@ module.exports = {
         })).data;
     },
     getPlayerFromDiscordId: async function (discordId) {
-        return (await instance.get("/members/" + discordId + "/player")).data;
+        return (await instance.get("/member/" + discordId + "/player")).data;
     },
     getPlayerFromUuid: async function (uuid) {
         return (await instance.get("/players/" + uuid)).data;
