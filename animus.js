@@ -22,12 +22,41 @@ module.exports = {
         return (await instance.post("/member", member)).data;
     },
     getMember: async function (discordId) {
-        return (await instance.get("/member/" + discordId)).data;
+        try {
+            return (await instance.get("/member/" + discordId)).data;
+        } catch {
+            return null;
+        }
     },
     updateMember: async function(discordId, data) {
         console.log("discordId: ", discordId)
         console.log("data: ", data)
         return (await instance.patch("/member/" + discordId + "/update", data)).data;
+    },
+    updatePlayerPerms: async function (uuid, permGroups) {
+        return (await instance.put("/players/" + uuid + "/permissions", {
+            permGroups: permGroups
+        })).data;
+    },
+    createPlayer: async function (discordId, username, uuid, permGroups) {
+        return (await instance.post("/players", {
+            memberDiscordId: discordId,
+            username: username,
+            uuid: uuid,
+            permGroups: permGroups
+        })).data;
+    },
+    getPlayerFromDiscordId: async function (discordId) {
+        return (await instance.get("/members/" + discordId + "/player")).data;
+    },
+    getPlayerFromUuid: async function (uuid) {
+        return (await instance.get("/players/" + uuid)).data;
+    },
+    migratePlayer: async function (oldUuid, newUuid, newUsername) {
+        return (await instance.patch("/players/" + oldUuid + "/migrate", {
+            uuid: newUuid,
+            username: newUsername
+        })).data;
     },
     getGroups: async function() {
         return (await instance.get("/permissions/groups")).data;

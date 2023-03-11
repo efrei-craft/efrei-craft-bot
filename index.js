@@ -3,6 +3,7 @@ const { Client, Collection, GatewayIntentBits, ActivityType} = require('discord.
 const { ModalBuilder, ActionRowBuilder, TextInputBuilder } = require("@discordjs/builders");
 const animus = require("./animus");
 require("./deploy-commands");
+const {getPlayerFromDiscordId} = require("./animus");
 
 const client = new Client({ intents: [GatewayIntentBits.DirectMessages, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers] });
 
@@ -84,18 +85,17 @@ client.on('interactionCreate', async interaction => {
         await interaction.deferReply({ephemeral: true});
         const mcName = interaction.fields.getTextInputValue("mcName");
         const user = interaction.member.id;
-        const member = await animus.getMember(user);
-        const player = member.player;
+        const player = await getPlayerFromDiscordId(user);
         if (player) {
             // player is already existing, update it
-            player.username = mcName;
-            player.uuid = await getMcUUID(mcName);
-            await animus.updateMember(user, {player: player});
+            if (player.username !== mcName) {
+                await animus.migratePlayer(player.uuid, await getMcUUID(mcName), mcName);
+            }
             await interaction.editReply({content: "Votre compte Minecraft a été mis à jour avec succès"});
         }
         else {
             // player is not existing, create it
-            await animus.updateMember(user, {player: {uuid: await getMcUUID(mcName), username: mcName, permGroups: await getUserRanks(interaction.member), perms: [], lastSeen: new Date(), chatChannel: "SERVER"}});
+            await animus.createPlayer(user, mcName, await getMcUUID(mcName), await getUserRanks(interaction.member));
             await interaction.editReply({content: "Votre compte Minecraft a été lié avec succès"});
         }
     }
@@ -107,11 +107,10 @@ client.on('interactionCreate', async interaction => {
         const lastName = interaction.fields.getTextInputValue("lastName");
         await interaction.member.roles.remove("1028938423253356544");
         await interaction.member.roles.add("1018926567902158970");
-        const member = await animus.getMember(discordID);
-        member.firstName = firstName;
-        member.lastName = lastName;
-        member.player.permGroups = await getUserRanks(interaction.member);
-        await animus.updateMember(discordID, member);
+        const player = await animus.getPlayerFromDiscordId(discordID);
+        player.permGroups = await getUserRanks(interaction.member);
+        await animus.updateMember(discordID, {firstName: firstName, lastName: lastName});
+        await animus.updatePlayerPerms(player.uuid, await getUserRanks(interaction.member));
         await interaction.editReply({content: "Votre profil a été mis à jour avec succès !"});
     }
 });
@@ -139,7 +138,7 @@ client.on('interactionCreate', async interaction => {
 
     // BOUTON - LIER SON COMPTE MINECRAFT
     else if (interaction.customId === "bind-mc") {
-        const player = (await animus.getMember(interaction.member.id)).player;
+        const player = await animus.getPlayerFromDiscordId(interaction.member.id);
         let mcAccountValue = "";
         if (player) {
             mcAccountValue = player.username;
