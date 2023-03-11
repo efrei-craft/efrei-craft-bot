@@ -3,6 +3,8 @@ FROM node:18.11.0
 WORKDIR /usr/src/app
 
 ENV ANIMUS_BASE_URL=https://api.efreicraft.fr
+ENV TOKEN=""
+ENV APPID=""
 
 COPY package.json ./
 RUN npm install
