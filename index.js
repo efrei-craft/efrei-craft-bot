@@ -81,6 +81,7 @@ client.on('interactionCreate', async interaction => {
     }
 
     else if (interaction.customId === "bind-mc-modal") {
+        await interaction.deferReply({ephemeral: true});
         const mcName = interaction.fields.getTextInputValue("mcName");
         const user = interaction.member.id;
         const member = await animus.getMember(user);
@@ -100,6 +101,7 @@ client.on('interactionCreate', async interaction => {
     }
 
     else if (interaction.customId === "memberize-modal") {
+        await interaction.deferReply({ephemeral: true});
         const discordID = interaction.member.id;
         const firstName = interaction.fields.getTextInputValue("firstName");
         const lastName = interaction.fields.getTextInputValue("lastName");
@@ -120,6 +122,7 @@ client.on('interactionCreate', async interaction => {
 
     // BOUTON - ACCEPTER LE REGLEMENT
     if (interaction.customId === "accept-rules") {
+        await interaction.deferReply({ephemeral: true});
         if (await interaction.member.roles.cache.has("1018926458632146995") || await interaction.member.roles.cache.has("1018926567902158970")) {
             await interaction.reply({content: "Vous avez déjà accepté le règlement !", ephemeral: true});
             return;
@@ -136,6 +139,7 @@ client.on('interactionCreate', async interaction => {
 
     // BOUTON - LIER SON COMPTE MINECRAFT
     else if (interaction.customId === "bind-mc") {
+        await interaction.deferReply({ephemeral: true});
         const player = (await animus.getMember(interaction.member.id)).player;
         let mcAccountValue = "";
         if (player) {
@@ -241,6 +245,7 @@ client.on('interactionCreate', async interaction => {
 
     // BOUTONS - PROMOS
     else if (interaction.customId.startsWith("p")) {
+        await interaction.deferReply({ephemeral: true});
         for (let i in promo_roles) {
             await interaction.member.roles.remove(promo_roles[i]);
         }
