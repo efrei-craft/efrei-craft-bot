@@ -1,4 +1,3 @@
-// const { SlashCommandBuilder } = require('@discordjs/builders');
 const { ContextMenuCommandBuilder } = require("@discordjs/builders");
 
 const Pole = {
