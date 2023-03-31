@@ -29,8 +29,6 @@ module.exports = {
         }
     },
     updateMember: async function(discordId, data) {
-        console.log("discordId: ", discordId)
-        console.log("data: ", data)
         return (await instance.patch("/member/" + discordId + "/update", data)).data;
     },
     updatePlayerPerms: async function (uuid, permGroups) {
@@ -70,12 +68,3 @@ module.exports = {
         return (await instance.get("/permissions/groups")).data;
     }
 };
-
-(async () => {
-    try {
-        const groups = await module.exports.getGroups();
-        console.log(groups[0]);
-    } catch (error) {
-        console.error(error);
-    }
-})();
