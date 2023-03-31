@@ -37,7 +37,6 @@ module.exports = {
         })).data;
     },
     createPlayer: async function (discordId, username, uuid, permGroups) {
-        console.log({discordId, username, uuid, permGroups})
         return (await instance.post("/players", {
             memberDiscordId: discordId,
             username: username,
