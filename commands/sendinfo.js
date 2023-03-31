@@ -83,8 +83,7 @@ const channelInfos = {
                 {
                     name: "\u200B",
                     value: "Pour obtenir tes rôles, clique sur le bouton ci-dessous !\n\n" +
-                        "> **ATTENTION** : Il te sera demandé ton nom, ton prénom ainsi que ton identifiant MyEfrei.\n" +
-                        "> Si tu ne les connais pas, assure-toi de t'en munir avant de cliquer sur le bouton !\n" +
+                        "> Il te sera demandé ton nom et ton prénom.\n" +
                         "> \u200B\n> Si tu as une question, n'hésite pas à contacter un membre du Bureau pour lui demander !"
                 }
             )
@@ -103,7 +102,11 @@ const channelInfos = {
                         "<:rainbow_eye:1080753652400140349> **Pôle Design :**\n" +
                         "> :one: à :three: points par design réalisé\n\n" +
                         "<:efrei_color:1017002709032906812> **JPO :**\n" +
-                        "> :five: points par JPO"
+                        "> :five: points par JPO\n\n" +
+                        "<:logoec:1031265315142770718> **Participation :**\n" +
+                        "> :one: à :three: points de participation générale\n" +
+                        "> :one: à :three: points de participation aux événements\n" +
+                        "> Les points d'événement seront précisés pour chaque événement"
                 }
             )
     ]
