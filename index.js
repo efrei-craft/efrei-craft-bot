@@ -36,11 +36,17 @@ async function getMcUUID(username) {
 async function getUserRanks(discordMember) {
     let ranks = [];
     const availableGroups = await animus.getGroups();
+    console.log("All groups names: " + availableGroups.map((g) => g.name))
+
+    const groupMap = availableGroups.map((g) => g.name);
+
     for (const role of discordMember.roles.cache.values()) {
-        if (role.name in availableGroups.map((g) => g.name)) {
+        console.log("My roles include : " + role.name)
+        if (groupMap.includes(role.name)) {
             ranks.push(role.name);
         }
     }
+    console.log("Rank found: " + ranks)
     return ranks;
 }
 
