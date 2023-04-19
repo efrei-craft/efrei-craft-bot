@@ -7,7 +7,7 @@ const channelInfos = {
             .setColor(0x00a1e0)
             .setTitle("Efrei Craft")
             .setThumbnail("https://avatars.githubusercontent.com/u/113559229")
-            .setDescription("**Bienvenue** sur le serveur d’Efrei Craft ! L’équipe te remercie d’avoir fait le pas et de nous avoir rejoint, nous espérons que tu trouveras ici ce que tu es venu chercher : *des potes sur Minecraft* ! ")
+            .setDescription("**Bienvenue** sur le serveur d’Efrei Craft ! L’équipe te remercie d’avoir fait le pas et de nous avoir rejoint, nous espérons que tu trouveras ici ce que tu es venu chercher : *des potes sur Minecraft*")
             .addFields(
                 {
                     name: "\u200B",
@@ -44,9 +44,28 @@ const channelInfos = {
                 },
                 {
                     name: "\u200B",
-                    value: "Enfin, nous espérons que vous passerez de bons moments avec nous sur Efrei Craft !\n" +
-                        "Veuillez cliquer sur le bouton ci-dessous si vous acceptez le réglement.\n" +
-                        "Puis allez dans <#1016986910268346379> pour choisir vos rôles !"
+                    value: "Enfin, nous espérons que vous passerez de bons moments avec nous sur Efrei Craft !"
+                }
+            ),
+        new EmbedBuilder()
+            .setColor(0x00a1e0)
+            .setTitle("Nos partenaires")
+            .setThumbnail("https://avatars.githubusercontent.com/u/113559229")
+            .setDescription("Les différentes associations sans qui nous n'existerions pas !")
+            .addFields(
+                {
+                    name: "\u200B",
+                    value: "<:onepantheon:1098330912908906546> **One Pantheon**\n" +
+                        "> 🌐 **Site web** : https://onepantheon.fr\n" +
+                        "> 📺 **Discord** : https://discord.gg/rnQfXBnDZX\n" +
+                        "> L'association dont nous sommes pôle. Ils nous accordent notre budget et nous permettent d'organiser des évènements dans l'Efrei !"
+                },
+                {
+                    name: "\u200B",
+                    value: "<:clubrezo:1098331946540605541> **Club-Rézo**\n" +
+                        "> 🌐 **Site web** : https://club-rezo.net\n" +
+                        "> 📺 **Discord** https://discord.gg/ZAAs87dV9v\n" +
+                        "> L'association qui nous héberge nos serveurs Minecraft ainsi que toute notre infrasctructure !"
                 }
             )
     ],
