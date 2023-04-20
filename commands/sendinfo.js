@@ -64,7 +64,7 @@ const channelInfos = {
                     name: "\u200B",
                     value: "<:clubrezo:1098331946540605541> **Club-Rézo**\n" +
                         "> 🌐 **Site web** : https://club-rezo.net\n" +
-                        "> 📺 **Discord** https://discord.gg/ZAAs87dV9v\n" +
+                        "> 📺 **Discord** : https://discord.gg/ZAAs87dV9v\n" +
                         "> L'association qui nous héberge nos serveurs Minecraft ainsi que toute notre infrasctructure !"
                 }
             )
