@@ -23,14 +23,27 @@ for (const file of eventFiles) {
     client.on(event.eventName, event.eventHandler);
 }
 
+// Source: https://github.com/timmyRS/add-dashes-to-uuid
+// Testé avec l'UUID de Niilyx
+function dashify(uuid) {
+    return [uuid.substring(0,8), uuid.substring(8,12), uuid.substring(12,16), uuid.substring(16,20), uuid.substring(20)].join("-");
+}
+
 async function getMcUUID(username) {
-    let res = await fetch(`https://playerdb.co/api/player/minecraft/${username}`, {
-        headers: {
-            'User-Agent': 'OccasionalImportEfreiCraft/1.0.0'
-        }
-    });
-    let { data: { player } } = await res.json();
-    return player.id
+    let res;
+    try {
+        res = await fetch(`https://api.mojang.com/users/profiles/minecraft/${username}`, {
+            method: "GET",
+            headers: {
+                'User-Agent': 'OccasionalImportEfreiCraft/1.0.0'
+            },
+        });
+    } catch (e) {
+        console.error(`Error while fetching Mojang API for player: ${username}`);
+        return null;
+    }
+    let { id } = await res.json();
+    return dashify(id)
 }
 
 async function getUserRanks(discordMember) {
