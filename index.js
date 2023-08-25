@@ -23,6 +23,20 @@ for (const file of eventFiles) {
     client.on(event.eventName, event.eventHandler);
 }
 
+class UnreachableMojangError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "Mojang API is unreachable";
+    }
+}
+
+class NoSuchPlayerError extends Error {
+    constructor(message, player) {
+        super(message);
+        this.name = `${player} does not exist`;
+    }
+}
+
 // Source: https://github.com/timmyRS/add-dashes-to-uuid
 // Testé avec l'UUID de Niilyx
 function dashify(uuid) {
@@ -40,14 +54,12 @@ async function getMcUUID(username) {
         });
     } catch (e) {
         console.error(`Error while fetching Mojang API for player: ${username}`);
-        console.error(e);
-        return null;
+        throw new UnreachableMojangError(e.message);
     }
     let json = await res.json();
-    if (!json.id && json.errorMessage) {
-        console.error(`Player: ${username} does not exist.`);
-        console.error(`Mojang responded: ${json.errorMessage}`)
-        return null;
+    if (json.errorMessage) {
+        // FIXME: Attention, errorMessage pourrait dire autre chose que "joueur non trouvé"
+        throw new NoSuchPlayerError(username);
     }
     return dashify(json.id)
 }
@@ -105,18 +117,29 @@ client.on('interactionCreate', async interaction => {
     else if (interaction.customId === "bind-mc-modal") {
         await interaction.deferReply({ephemeral: true});
         const mcName = interaction.fields.getTextInputValue("mcName");
+        let mcUUID;
+        try {
+            mcUUID = await getMcUUID(mcName);
+        } catch (e) {
+            if (e instanceof UnreachableMojangError) {
+                await interaction.editReply({content: "Les serveurs de Mojang sont actuellement indisponibles. Veuillez réessayer plus tard."});
+            } else if (e instanceof NoSuchPlayerError) {
+                await interaction.editReply({content: "Erreur lors de la récupération de votre compte Minecraft. Vérifiez que votre pseudo est correct et réessayez."});
+            }
+            return;
+        }
         const user = interaction.member.id;
         const player = await animus.getPlayerFromDiscordId(user);
         if (player) {
             // player is already existing, update it
             if (player.username !== mcName) {
-                await animus.migratePlayer(player.uuid, await getMcUUID(mcName), mcName);
+                await animus.migratePlayer(player.uuid, mcUUID, mcName);
             }
             await interaction.editReply({content: "Votre compte Minecraft a été mis à jour avec succès"});
         }
         else {
             // player is not existing, create it
-            await animus.createPlayer(user, mcName, await getMcUUID(mcName), await getUserRanks(interaction.member));
+            await animus.createPlayer(user, mcName, mcUUID, await getUserRanks(interaction.member));
             await interaction.editReply({content: "Votre compte Minecraft a été lié avec succès"});
         }
     }
