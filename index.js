@@ -40,10 +40,16 @@ async function getMcUUID(username) {
         });
     } catch (e) {
         console.error(`Error while fetching Mojang API for player: ${username}`);
+        console.error(e);
         return null;
     }
-    let { id } = await res.json();
-    return dashify(id)
+    let json = await res.json();
+    if (!json.id && json.errorMessage) {
+        console.error(`Player: ${username} does not exist.`);
+        console.error(`Mojang responded: ${json.errorMessage}`)
+        return null;
+    }
+    return dashify(json.id)
 }
 
 async function getUserRanks(discordMember) {
