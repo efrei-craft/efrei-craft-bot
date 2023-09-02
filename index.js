@@ -163,6 +163,7 @@ client.on('interactionCreate', async interaction => {
 
     // BOUTON - LIER SON COMPTE MINECRAFT
     else if (interaction.customId === "bind-mc") {
+        const interactionStart = new Date();
         const player = await animus.getPlayerFromDiscordId(interaction.member.id);
         let mcAccountValue = "";
         if (player) {
@@ -189,6 +190,8 @@ client.on('interactionCreate', async interaction => {
                 mcNameInput
             );
         modal.addComponents(row);
+        const interactionEnd = new Date();
+        console.log("Interaction creation took " + Math.round(interactionEnd - interactionStart) / 1000 + "s");
         await interaction.showModal(modal);
     }
 
