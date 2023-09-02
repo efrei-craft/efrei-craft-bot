@@ -9,6 +9,8 @@ ENV APPID=""
 COPY package.json ./
 RUN npm install
 
+RUN echo "10.10.51.120 api.efreicraft.fr" >> /etc/hosts
+
 COPY . .
 
 EXPOSE 3000
