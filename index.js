@@ -69,7 +69,6 @@ async function getUserRanks(discordMember) {
     let ranks = [];
     const availableGroups = await animus.getGroups();
     const groupMap = availableGroups.map((g) => g.name);
-    console.log(groupMap);
     for (const role of discordMember.roles.cache.values()) {
         if (groupMap.includes(role.name)) {
             ranks.push(role.name);
