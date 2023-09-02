@@ -10,3 +10,4 @@ services:
       ANIMUS_API_KEY: ${ANIMUS_API_KEY}
     extra_hosts:
       - "api.efreicraft.fr:10.10.51.120"
+      - "discord.com:162.159.138.232"
