@@ -8,6 +8,8 @@ services:
       APPID: ${APPID}
       ANIMUS_BASE_URL: "https://api.efreicraft.fr/"
       ANIMUS_API_KEY: ${ANIMUS_API_KEY}
+    dns:
+      - "1.1.1.1"
+      - "1.0.0.1"
     extra_hosts:
       - "api.efreicraft.fr:10.10.51.120"
-      - "discord.com:162.159.138.232"
