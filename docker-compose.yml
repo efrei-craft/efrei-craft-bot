@@ -2,11 +2,11 @@ version: '3.7'
 
 services:
   bot:
-    container_name: efrei-craft-bot
     image: ghcr.io/efrei-craft/efrei-craft-bot:main
-    restart: always
     environment:
       TOKEN: ${TOKEN}
       APPID: ${APPID}
       ANIMUS_BASE_URL: "https://api.efreicraft.fr/"
       ANIMUS_API_KEY: ${ANIMUS_API_KEY}
+    extra_hosts:
+      - "api.efreicraft.fr:10.10.51.120"
