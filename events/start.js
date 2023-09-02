@@ -1,4 +1,4 @@
-const { Events, ActivityType} = require("discord.js");
+const { Events, ActivityType } = require("discord.js");
 const animus = require("../animus");
 
 module.exports = {
