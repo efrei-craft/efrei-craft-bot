@@ -5,7 +5,7 @@ const API_KEY = process.env.ANIMUS_API_KEY;
 
 const instance = axios.create({
     baseURL: BASE_URL,
-    timeout: 1000,
+    timeout: 5000,
     headers: {
         "x-api-key": API_KEY,
         "Content-Type": "application/json"
