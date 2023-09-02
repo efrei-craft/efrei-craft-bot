@@ -3,6 +3,7 @@ const { Client, Collection, GatewayIntentBits, ActivityType, Partials } = requir
 const { ModalBuilder, ActionRowBuilder, TextInputBuilder } = require("@discordjs/builders");
 const animus = require("./animus");
 require("./deploy-commands");
+const config = require("./config.json");
 
 const client = new Client({ intents: [GatewayIntentBits.DirectMessages, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers], partials: [Partials.GuildMember] });
 
@@ -68,6 +69,7 @@ async function getUserRanks(discordMember) {
     let ranks = [];
     const availableGroups = await animus.getGroups();
     const groupMap = availableGroups.map((g) => g.name);
+    console.log(groupMap);
     for (const role of discordMember.roles.cache.values()) {
         if (groupMap.includes(role.name)) {
             ranks.push(role.name);
@@ -102,11 +104,7 @@ client.on('interactionCreate', async interaction => {
     if (!interaction.isModalSubmit()) return;
 
     if (interaction.customId.startsWith("addtopole-modal-")) {
-        const Pole = {
-            Design: "1019716929390383164",
-            Dev: "1019717015893721179",
-            Build: "1028666709864882276"
-        };
+        const Pole = config.discord_roles_id;
         let poleName = interaction.fields.getTextInputValue("poleName");
         poleName = poleName[0].toUpperCase() + poleName.slice(1).toLowerCase();
         const user = interaction.guild.members.cache.get(interaction.customId.split("addtopole-modal-")[1]);
@@ -154,7 +152,7 @@ client.on('interactionCreate', async interaction => {
         const player = await animus.getPlayerFromDiscordId(discordID);
         player.permGroups = await getUserRanks(interaction.member);
         await animus.updateMember(discordID, {firstName: firstName, lastName: lastName});
-        await animus.updatePlayerPerms(player.uuid, await getUserRanks(interaction.member));
+        await animus.updatePlayerGroups(player.uuid, await getUserRanks(interaction.member));
         await interaction.editReply({content: "Votre profil a été mis à jour avec succès !"});
     }
 });
