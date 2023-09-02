@@ -2,20 +2,11 @@ const fs = require('fs');
 const { Client, Collection, GatewayIntentBits, ActivityType, Partials } = require('discord.js');
 const { ModalBuilder, ActionRowBuilder, TextInputBuilder } = require("@discordjs/builders");
 const animus = require("./animus");
+const { getMcUUID, getUserRanks, NoSuchPlayerError, UnreachableMojangError } = require("./utils");
 require("./deploy-commands");
 const config = require("./config.json");
 
 const client = new Client({ intents: [GatewayIntentBits.DirectMessages, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers], partials: [Partials.GuildMember] });
-
-client.commands = new Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-
-for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    // Set a new item in the Collection
-    // With the key as the command name and the value as the exported module
-    client.commands.set(command.data.name, command);
-}
 
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 
@@ -24,65 +15,17 @@ for (const file of eventFiles) {
     client.on(event.eventName, event.eventHandler);
 }
 
-class UnreachableMojangError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "Mojang API is unreachable";
-    }
-}
 
-class NoSuchPlayerError extends Error {
-    constructor(message, player) {
-        super(message);
-        this.name = `${player} does not exist`;
-    }
-}
-
-// Source: https://github.com/timmyRS/add-dashes-to-uuid
-// Testé avec l'UUID de Niilyx
-function dashify(uuid) {
-    return [uuid.substring(0,8), uuid.substring(8,12), uuid.substring(12,16), uuid.substring(16,20), uuid.substring(20)].join("-");
-}
-
-async function getMcUUID(username) {
-    let res;
-    try {
-        res = await fetch(`https://api.mojang.com/users/profiles/minecraft/${username}`, {
-            method: "GET",
-            headers: {
-                'User-Agent': 'OccasionalImportEfreiCraft/1.0.0'
-            },
-        });
-    } catch (e) {
-        console.error(`Error while fetching Mojang API for player: ${username}`);
-        throw new UnreachableMojangError(e.message);
-    }
-    let json = await res.json();
-    if (json.errorMessage) {
-        // FIXME: Attention, errorMessage pourrait dire autre chose que "joueur non trouvé"
-        throw new NoSuchPlayerError(username);
-    }
-    return dashify(json.id)
-}
-
-async function getUserRanks(discordMember) {
-    let ranks = [];
-    const availableGroups = await animus.getGroups();
-    const groupMap = availableGroups.map((g) => g.name);
-    for (const role of discordMember.roles.cache.values()) {
-        if (groupMap.includes(role.name)) {
-            ranks.push(role.name);
-        }
-    }
-    return ranks;
-}
-
-client.once('ready', () => {
-    console.log('Successfully logged in!');
-    client.user.setPresence({status: "online", activities: [{ name: "Minecraft | efreicraft.fr", type: ActivityType.Playing}]});
-});
 
 // COMMANDS
+client.commands = new Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+for (const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+    // Set a new item in the Collection
+    // With the key as the command name and the value as the exported module
+    client.commands.set(command.data.name, command);
+}
 client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand() && !interaction.isAutocomplete()) return;
 
@@ -161,7 +104,7 @@ client.on('interactionCreate', async interaction => {
     if (!interaction.isButton()) return;
 
     // BOUTON - LIER SON COMPTE MINECRAFT
-    else if (interaction.customId === "bind-mc") {
+    if (interaction.customId === "bind-mc") {
         const player = await animus.getPlayerFromDiscordId(interaction.member.id);
         let mcAccountValue = "";
         if (player) {
