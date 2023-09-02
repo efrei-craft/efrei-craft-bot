@@ -1,5 +1,6 @@
 const { Events } = require("discord.js");
 const animus = require("../animus");
+const { getUserRanks } = require("../utils");
 
 module.exports = {
     eventName: Events.GuildMemberUpdate,
@@ -20,15 +21,7 @@ module.exports = {
         try {
             const playerUuid = (await animus.getPlayerFromDiscordId(newMember.id)).uuid;
             if (playerUuid !== null) {
-                const groupMap = require("../config.json").discord_roles_id;
-                const ranks = [];
-                for (const role of newMember.roles.cache.values()) {
-                    for (const roleName in groupMap) {
-                        if (groupMap[roleName] === role.id) {
-                            ranks.push(roleName);
-                        }
-                    }
-                }
+                const ranks = getUserRanks(newMember);
                 await animus.updatePlayerGroups(playerUuid, ranks);
                 console.log("Updated permissions groups of " + newMember.user.username + " (" + newMember.id + ") to " + ranks.join(", ") + ".");
             }
