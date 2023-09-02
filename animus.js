@@ -19,17 +19,20 @@ module.exports = {
         member.firstName = firstName;
         member.lastName = lastName;
         member.promo = promo;
-        return (await instance.post("/member", member)).data;
+        return (await instance.post("/members", member)).data;
     },
     getMember: async function (discordId) {
         try {
-            return (await instance.get("/member/" + discordId)).data;
+            return (await instance.get("/members/" + discordId)).data;
         } catch {
             return null;
         }
     },
+    getAllMembers: async function () {
+        return (await instance.get("/members")).data;
+    },
     updateMember: async function(discordId, data) {
-        return (await instance.patch("/member/" + discordId + "/update", data)).data;
+        return (await instance.patch("/members/" + discordId + "/update", data)).data;
     },
     updatePlayerGroups: async function (uuid, permGroups) {
         return (await instance.patch("/players/" + uuid + "/groups", {
@@ -46,7 +49,7 @@ module.exports = {
     },
     getPlayerFromDiscordId: async function (discordId) {
         try {
-            return (await instance.get("/member/" + discordId + "/player")).data;
+            return (await instance.get("/members/" + discordId + "/player")).data;
         } catch {
             return null;
         }
