@@ -13,6 +13,7 @@ module.exports = {
         const members = await animus.getAllMembers();
         const guild = client.guilds.cache.get(require("../config.json").guild_id);
         for (const member of guild.members.cache.values()) {
+            if (member.user.bot) continue;
             if (members.find((m) => m.discordId === member.id) === undefined) {
                 console.log("Member " + member.user.username + " was not in Database, creating it...")
                 await animus.createMember(member.id, "", "", 0);
