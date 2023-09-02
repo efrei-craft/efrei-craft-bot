@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { Client, Collection, GatewayIntentBits, ActivityType, Partials } = require('discord.js');
+const { Client, Collection, GatewayIntentBits, Partials } = require('discord.js');
 const { ModalBuilder, ActionRowBuilder, TextInputBuilder } = require("@discordjs/builders");
 const animus = require("./animus");
 const { getMcUUID, getUserRanks, NoSuchPlayerError, UnreachableMojangError } = require("./utils");
