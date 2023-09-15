@@ -80,7 +80,7 @@ const channelInfos = {
                         "> 🌐 **Site web** : [efreicraft.fr](https://efreicraft.fr)\n" +
                         "> 🖼️ **Instagram** : [@efreicraft](https://instagram.com/efreicraft)\n" +
                         "> 💼 **LinkedIn** : [@efreicraft](https://linkedin.com/company/efreicraft)\n" +
-                        "> 💻 **GitHub** : [@efrei-craft](https://github.com/efrei-craft)" +
+                        "> 💻 **GitHub** : [@efrei-craft](https://github.com/efrei-craft)\n" +
                         "> 💬 **Discord** : https://discord.gg/5kfu9D69AJ"
                 }
             )
