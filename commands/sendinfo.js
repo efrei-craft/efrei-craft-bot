@@ -67,6 +67,22 @@ const channelInfos = {
                         "> 📺 **Discord** : https://discord.gg/ZAAs87dV9v\n" +
                         "> L'association qui nous héberge nos serveurs Minecraft ainsi que toute notre infrasctructure !"
                 }
+            ),
+        new EmbedBuilder()
+            .setColor(0x00a1e0)
+            .setTitle("Nos réseaux")
+            .setThumbnail("https://avatars.githubusercontent.com/u/113559229")
+            .setDescription("Retrouvez-nous sur les différents réseaux sociaux !")
+            .addFields(
+                {
+                    name: "\u200B",
+                    value: "<> **Twitter**\n" +
+                        "> 🌐 **Site web** : [efreicraft.fr](https://efreicraft.fr)\n" +
+                        "> 🖼️ **Instagram** : [@efreicraft](https://instagram.com/efreicraft)\n" +
+                        "> 💼 **LinkedIn** : [@efreicraft](https://linkedin.com/company/efreicraft)\n" +
+                        "> 💻 **GitHub** : [@efrei-craft](https://github.com/efrei-craft)" +
+                        "> 💬 **Discord** : https://discord.gg/5kfu9D69AJ"
+                }
             )
     ],
     "infos": [
@@ -81,14 +97,15 @@ const channelInfos = {
                     value: "🖥️ **IP principale :** `efreicraft.fr`\n\n" +
                         "<:minecraft:1016990742419357786> *Minecraft Vanilla :*\n" +
                         "> ❤️ **Type** : ``Survie``\n" +
-                        "> 🗂️ **Version** : ``1.19.3``\n\n" +
+                        "> 🗂️ **Version** : ``1.20/1.20.1``\n\n" +
                         "<:red_bed:1027288341248475136> *Mini-jeux :*\n" +
                         "> 🕹️ Découvrez nos nouveaux mini-jeux\n" +
-                        "> 🗂️ **Version** : ``1.19.3``\n\n" +
+                        "> 🗂️ **Version** : ``1.19.3+``\n\n" +
                         "<:forge:1018855440337096765> *Minecraft Moddé :*\n" +
                         "> ❤️ **Type** : ``Survie Moddée``\n" +
-                        "> 📦 **Modpack** : [Divine Journey 2 *v2.19.1*](https://www.curseforge.com/minecraft/modpacks/divine-journey-2)\n" +
-                        "> 🗂️ **Version du jeu** : ``1.12.2``\n" +
+                        "> 📦 **Modpack** : [Create Arcane Engineering](https://www.curseforge.com/minecraft/modpacks/create-arcane-engineering)\n" +
+                        "> 🗂️ **Version du jeu** : ``1.18.2``\n" +
+                        "> 🧬 **Version du modpack** : ``0.1.7``\n" +
                         "> 🖥️ **IP du serveur :** `modded.efreicraft.fr`"
                 }
             )
@@ -119,13 +136,15 @@ const channelInfos = {
                         "<:server:1080087318918074438> **Pôle Dev :**\n" +
                         "> :one: à :five: points par plugin/mini-jeu (en fonction de la difficulté estimée)\n\n" +
                         "<:rainbow_eye:1080753652400140349> **Pôle Design :**\n" +
-                        "> :one: à :three: points par design réalisé\n\n" +
+                        "> :one: à :three: points par design réalisé\n" +
+                        "> Jusqu'à :two: points par annonce\n\n" +
                         "<:efrei_color:1017002709032906812> **JPO :**\n" +
                         "> :five: points par JPO\n\n" +
                         "<:logoec:1031265315142770718> **Participation :**\n" +
                         "> :one: à :three: points de participation générale\n" +
                         "> :one: à :three: points de participation aux événements\n" +
-                        "> Les points d'événement seront précisés pour chaque événement"
+                        "> Les points d'événement seront précisés pour chaque événement\n\n" +
+                        "***Il est rappelé que ce barême est donné à titre indicatif uniquement, les points sont distribués à la seule discrétion du Bureau.***"
                 }
             )
     ]
