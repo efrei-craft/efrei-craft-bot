@@ -88,7 +88,7 @@ const channelInfos = {
             .addFields(
                 {
                     name: "\u200B",
-                    value: "<> **Twitter**\n" +
+                    value: "*Retrouvez-nous sur :*\n" +
                         "> 🌐 **Site web** : [efreicraft.fr](https://efreicraft.fr)\n" +
                         "> 🖼️ **Instagram** : [@efreicraft](https://instagram.com/efreicraft)\n" +
                         "> 💼 **LinkedIn** : [@efreicraft](https://linkedin.com/company/efreicraft)\n" +
