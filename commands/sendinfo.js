@@ -40,7 +40,7 @@ const channelInfos = {
                 },
                 {
                     name: "\u200B",
-                    value: "> :seven: Il est interdit d'utiliser toute technique de triche sur les serveurs Minecraft, quel qu'elle soit (AutoClick, X-Ray, Baritone, etc...). Si vous avez un doute sur l'utilisation d'un mod, contactez un membre du bureau."
+                    value: "> :seven: Il est **interdit** d'utiliser toute technique de **triche** sur les **serveurs Minecraft**, quelle qu'elle soit (AutoClick, X-Ray, Baritone, etc...). Si vous avez un doute sur l'utilisation d'un mod, contactez un membre du bureau."
                 },
                 {
                     name: "\u200B",

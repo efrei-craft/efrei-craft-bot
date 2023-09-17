@@ -48,3 +48,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Refresh Docker Container on Portainer
+        uses: dkershner6/post-api-call-action@v1
+        with:
+          url: ${{ secrets.PORTAINER_WEBHOOK_URL }}
