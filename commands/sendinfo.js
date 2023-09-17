@@ -36,11 +36,23 @@ const channelInfos = {
                 },
                 {
                     name: "\u200B",
-                    value: "> :six: Si tu remarques un manquement au règlement, ou que tu ressens le besoin de nous informer d’un problème sur le serveur, contactes nous via <#1019682214574817280> ou via MP."
+                    value: "> :six: **Pas de publicité** pour d’autres serveurs, que ce soit en vocal ou en écrit, sauf si vous avez l’autorisation d’un administrateur."
                 },
                 {
                     name: "\u200B",
-                    value: "> :seven: Les admins se réservent le droit de modifier les règles précédemment énoncées à tout moment : la résolution des problèmes nous étant communiqués et n’ayant pas de solution dans les règles actuelles sera faite à la discrétion des administrateurs du serveur."
+                    value: "> :seven: Il est interdit d'utiliser toute technique de triche sur les serveurs Minecraft, quel qu'elle soit (AutoClick, X-Ray, Baritone, etc...). Si vous avez un doute sur l'utilisation d'un mod, contactez un membre du bureau."
+                },
+                {
+                    name: "\u200B",
+                    value: "> :eight: Si tu remarques un manquement au règlement, ou que tu ressens le besoin de nous informer d’un problème sur le serveur, contactes nous via <#1019682214574817280> ou via MP."
+                },
+                {
+                    name: "\u200B",
+                    value: "> :nine: Les admins se réservent le droit de modifier les règles précédemment énoncées à tout moment : la résolution des problèmes nous étant communiqués et n’ayant pas de solution dans les règles actuelles sera faite à la discrétion des administrateurs du serveur."
+                },
+                {
+                    name: "\u200B",
+                    value: "***Le non-respect de ces règles peut entrainer un bannissement du serveur Minecraft et du Discord. Dans certains cas, votre note Learning XP d'Efrei Craft pour le semestre sera automatiquement définie à 0 points. Vous pouvez aussi vous prendre un malus sur votre note Learning XP globale ! Alors faites attention et respectez les règles !***"
                 },
                 {
                     name: "\u200B",
