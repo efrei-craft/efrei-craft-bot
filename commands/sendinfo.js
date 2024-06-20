@@ -7,7 +7,7 @@ const channelInfos = {
             .setColor(0x00a1e0)
             .setTitle("Efrei Craft")
             .setThumbnail("https://avatars.githubusercontent.com/u/113559229")
-            .setDescription("**Bienvenue** sur le serveur d’Efrei Craft ! L’équipe te remercie d’avoir fait le pas et de nous avoir rejoint, nous espérons que tu trouveras ici ce que tu es venu chercher : *des potes sur Minecraft*")
+            .setDescription("**Bienvenue** sur le serveur d'Efrei Craft ! L'équipe te remercie d'avoir fait le pas et de nous avoir rejoint, nous espérons que tu trouveras ici ce que tu es venu chercher : *des potes sur Minecraft*")
             .addFields(
                 {
                     name: "\u200B",
@@ -16,15 +16,15 @@ const channelInfos = {
                 },
                 {
                     name: "\u200B",
-                    value: "> :one: (Bonne ambiance) implique (respect) et (bienveillance). Si la table de vérité le dit, c’est que ça doit être vrai 😉"
+                    value: "> :one: (Bonne ambiance) implique (respect) et (bienveillance). Si la table de vérité le dit, c'est que ça doit être vrai 😉"
                 },
                 {
                     name: "\u200B",
-                    value: "> :two: Comme vous l’avez toujours su, insultes et autres intimidations ne sont en aucun cas tolérées sur le serveur, **Ce n’est pas gentil d’être méchant !**"
+                    value: "> :two: Comme vous l'avez toujours su, insultes et autres intimidations ne sont en aucun cas tolérées sur le serveur, **Ce n'est pas gentil d'être méchant !**"
                 },
                 {
                     name: "\u200B",
-                    value: "> :three: Bien entendu, Aucune discrimination et autres insultes, que ce soit sur la condition physique, les croyances ou autres, n’est tolérée sur le serveur. (~~Les crackés on vous voit~~)"
+                    value: "> :three: Bien entendu, Aucune discrimination et autres insultes, que ce soit sur la condition physique, les croyances ou autres, n'est tolérée sur le serveur. (~~Les crackés on vous voit~~)"
                 },
                 {
                     name: "\u200B",
@@ -32,11 +32,11 @@ const channelInfos = {
                 },
                 {
                     name: "\u200B",
-                    value: "> :five: **SPAM mentions et SPAM interdit**, un salon est dédié aux memes et au shitpost, veillez à respecter le rôle des différents salons afin de permettre au serveur d’être le plus accessible possible."
+                    value: "> :five: **SPAM mentions et SPAM interdit**, un salon est dédié aux memes et au shitpost, veillez à respecter le rôle des différents salons afin de permettre au serveur d'être le plus accessible possible."
                 },
                 {
                     name: "\u200B",
-                    value: "> :six: **Pas de publicité** pour d’autres serveurs, que ce soit en vocal ou en écrit, sauf si vous avez l’autorisation d’un administrateur."
+                    value: "> :six: **Pas de publicité** pour d'autres serveurs, que ce soit en vocal ou en écrit, sauf si vous avez l'autorisation d'un administrateur."
                 },
                 {
                     name: "\u200B",
@@ -44,11 +44,11 @@ const channelInfos = {
                 },
                 {
                     name: "\u200B",
-                    value: "> :eight: Si tu remarques un manquement au règlement, ou que tu ressens le besoin de nous informer d’un problème sur le serveur, contactes nous via <#1019682214574817280> ou via MP."
+                    value: "> :eight: Si tu remarques un manquement au règlement, ou que tu ressens le besoin de nous informer d'un problème sur le serveur, contactes nous via <#1019682214574817280> ou via MP."
                 },
                 {
                     name: "\u200B",
-                    value: "> :nine: Les admins se réservent le droit de modifier les règles précédemment énoncées à tout moment : la résolution des problèmes nous étant communiqués et n’ayant pas de solution dans les règles actuelles sera faite à la discrétion des administrateurs du serveur."
+                    value: "> :nine: Les admins se réservent le droit de modifier les règles précédemment énoncées à tout moment : la résolution des problèmes nous étant communiqués et n'ayant pas de solution dans les règles actuelles sera faite à la discrétion des administrateurs du serveur."
                 },
                 {
                     name: "\u200B",
@@ -109,15 +109,15 @@ const channelInfos = {
                     value: "🖥️ **IP principale :** `efreicraft.fr`\n\n" +
                         "<:minecraft:1016990742419357786> *Minecraft Vanilla :*\n" +
                         "> ❤️ **Type** : ``Survie``\n" +
-                        "> 🗂️ **Version** : ``1.20/1.20.1``\n\n" +
+                        "> 🗂️ **Version** : ``1.20/1.20.2``\n\n" +
                         "<:red_bed:1027288341248475136> *Mini-jeux :*\n" +
                         "> 🕹️ Découvrez nos nouveaux mini-jeux\n" +
                         "> 🗂️ **Version** : ``1.19.3+``\n\n" +
                         "<:forge:1018855440337096765> *Minecraft Moddé :*\n" +
                         "> ❤️ **Type** : ``Survie Moddée``\n" +
-                        "> 📦 **Modpack** : [Create Arcane Engineering](https://www.curseforge.com/minecraft/modpacks/create-arcane-engineering)\n" +
-                        "> 🗂️ **Version du jeu** : ``1.18.2``\n" +
-                        "> 🧬 **Version du modpack** : ``0.1.7``\n" +
+                        "> 📦 **Modpack** : [ATM9](https://www.curseforge.com/minecraft/modpacks/all-the-mods-9)\n" +
+                        "> 🗂️ **Version du jeu** : ``1.20.1``\n" +
+                        "> 🧬 **Version du modpack** : ``0.2.60``\n" +
                         "> 🖥️ **IP du serveur :** `modded.efreicraft.fr`"
                 }
             )
