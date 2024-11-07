@@ -11,7 +11,10 @@ module.exports = {
 
         // Check if all members are in the database
         const members = await animus.getAllMembers();
+
         const guild = client.guilds.cache.get(require("../config.json").guild_id);
+        // To update the cache
+        await guild.members.list({ limit: 1000, cache: false })
         for (const member of guild.members.cache.values()) {
             if (member.user.bot) continue;
             if (members.find((m) => m.discordId === member.id) === undefined) {
